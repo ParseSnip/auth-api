@@ -110,6 +110,9 @@ router.delete('/users/me',auth, async (req,res)=>{
     }
 })
 
+
+
+
 //multer is a module middleware that makes file upload easy
 const upload = multer({
     //dest: 'images',//destination is our images folder
