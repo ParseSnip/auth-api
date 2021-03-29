@@ -1,23 +1,10 @@
 const request = require('supertest')
-const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
 const app = require('../src/app')
 const User = require('../src/models/user')
-const Tasks = require('../src/models/task')
-const { response } = require('../src/app')
+const {userOne, userOneId, setupDatabase} = require('./fixtures/db')
 
 
 
-const userOneId = new mongoose.Types.ObjectId()
-const userOne = {
-    _id: userOneId,
-    name: 'Seany',
-    email: 'sean12@gmail.com',
-    password: 'Hashme123',
-    tokens:[{
-        token: jwt.sign({_id:userOneId}, process.env.JWT_SECRET)
-    }]
-}
 
 const taskOne = {
     description: 'do this and do that',
@@ -27,17 +14,19 @@ const taskOne = {
 
 
 //use to empty documents then add new user document after each test case
-beforeEach(async()=>{
-    await User.deleteMany()
-
-    //create a new user to test logins
-    const user = new User(userOne)
-    await user.save()
-})
+beforeEach(setupDatabase)
 
 // afterEach(()=>{
 
 // })
+
+
+// Should not signup user with invalid name/email/password
+// Should not update user if unauthenticated
+// Should not update user with invalid name/email/password
+// Should not delete user if unauthenticated
+
+
 
 test('Should signup a new user', async()=>{
     const response = await request(app).post('/users').send({
