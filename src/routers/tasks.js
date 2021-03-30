@@ -13,6 +13,11 @@ router.post('/tasks', auth, async (req,res)=>{
     })
 
     try{
+        const existingTask = await Tasks.find({description: req.body.description})
+        console.log(existingTask)
+        if(existingTask.length>0){
+            return status(500).send('Task already exists')
+        }
         await task.save()
         res.status(201).send(task)
     }catch(e){

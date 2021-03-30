@@ -5,7 +5,7 @@ const User=require('../models/user')
 //whenever we use auth if it is successful we return a single user by id as req.user
 const auth = async(req,res,next)=>{
     try {
-        //get token from request in router
+        //get token from request in header
         const token = req.header('Authorization').replace('Bearer ','')
         //make sure token is valid
         const decoded = jwt.verify(token,process.env.JWT_SECRET)
