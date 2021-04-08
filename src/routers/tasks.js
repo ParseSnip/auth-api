@@ -100,7 +100,11 @@ router.patch('/tasks/:id', auth, async(req,res)=>{
         // const task = await Tasks.findByIdAndUpdate(req.params.id, req.body,{new:true, isValidOperation: true})
         //_id is shorthand for _id:_id
         const task = await Tasks.findOne({_id, owner: req.user._id})
-
+        
+        if(!task){
+            return res.status(404).send('Error no task found')
+        }
+        
         updates.forEach((update)=>{
             //[] this is a dynamic prop 
             task[update] = req.body[update]
@@ -108,10 +112,7 @@ router.patch('/tasks/:id', auth, async(req,res)=>{
 
         await task.save()
 
-    if(!task){
-        return res.status(404).send('Error no task found')
-    }
-    
+
         res.status(201).send(task)
     } catch (e) {
         res.status(500).send(e)
